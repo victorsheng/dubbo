@@ -16,6 +16,8 @@
  */
 package com.alibaba.dubbo.demo.provider;
 
+import com.alibaba.dubbo.common.logger.Logger;
+import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.demo.DemoService;
 import com.alibaba.dubbo.rpc.RpcContext;
 
@@ -23,6 +25,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DemoServiceImpl implements DemoService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DemoService.class);
+
+    public String sayHelloSleep1000000(String name) {
+        try {
+            System.out.println(Thread.currentThread().getName());
+            Thread.sleep(10000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
+        return "Hello " + name + ", response form provider: " + RpcContext.getContext().getLocalAddress();
+    }
 
     public String sayHello(String name) {
         System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
